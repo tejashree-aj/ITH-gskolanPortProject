@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="BoatClubRecord\**" />
+    <EmbeddedResource Remove="BoatClubRecord\**" />
+    <None Remove="BoatClubRecord\**" />
+    <Page Remove="BoatClubRecord\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DataModels\DataModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="BoatPortData\" />
+  </ItemGroup>
+
+</Project>

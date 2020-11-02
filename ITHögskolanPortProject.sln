@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30611.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortAdministrationProject", "PortAdministrationProject\PortAdministrationProject.csproj", "{93C719BC-E1F7-4AB9-AD12-91350E4A6A9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataModels", "DataModels\DataModels.csproj", "{164C91EE-B436-4501-B220-95BD01E1F286}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{93C719BC-E1F7-4AB9-AD12-91350E4A6A9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93C719BC-E1F7-4AB9-AD12-91350E4A6A9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93C719BC-E1F7-4AB9-AD12-91350E4A6A9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93C719BC-E1F7-4AB9-AD12-91350E4A6A9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{164C91EE-B436-4501-B220-95BD01E1F286}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{164C91EE-B436-4501-B220-95BD01E1F286}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{164C91EE-B436-4501-B220-95BD01E1F286}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{164C91EE-B436-4501-B220-95BD01E1F286}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E65281E2-690D-4CEA-9885-58DED37F687D}
+	EndGlobalSection
+EndGlobal
