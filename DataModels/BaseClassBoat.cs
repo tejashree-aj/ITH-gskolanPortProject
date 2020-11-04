@@ -6,6 +6,7 @@ namespace PortAdministrationProject
 {
     public enum TypeOfBoat
     {
+        None,
         RowingBoat,
         MotorBoat,
         SailBoat,
