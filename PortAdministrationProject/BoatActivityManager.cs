@@ -1,6 +1,7 @@
 ﻿using DataModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -12,10 +13,22 @@ namespace PortAdministrationProject
     {
         public static void AddBoatToList(List<BaseClassBoat> boats)
         {
-            string filePath = @"C:\ITHogskolanProjects\ITHögskolanPortProject\PortAdministrationProject\BoatPortData\BoatData.csv";
+            string filePath = @"BoatPortData\BoatData.csv";
+            List<string> csvData = File.ReadLines(filePath, System.Text.Encoding.UTF7).ToList();
+            ListDataFunction(boats, csvData);
+        }
 
+        public static void AddParkedBoatToList(List<BaseClassBoat> parkedBoats)
+        {
+            string filePath = @"BoatPortData\ParkedBoatData.csv";
+            List<string> csvData = File.ReadLines(filePath, System.Text.Encoding.UTF7).ToList();
+            ListDataFunction(parkedBoats, csvData);
+        }
+
+        public static void ListDataFunction(List<BaseClassBoat> boats, List<string> csvData)
+        {
             int rowCount = 0;
-            foreach (string boat in File.ReadLines(filePath, System.Text.Encoding.UTF7))
+            foreach (string boat in csvData)
             {
                 string[] boatData = boat.Split(',');
 
@@ -133,6 +146,7 @@ namespace PortAdministrationProject
                 foreach (BaseClassBoat parkingBoatData in randomData)
                 {
                     parkingBoatData.ArrivalTime = DateTime.Now;
+
                     double maxSpeed = parkingBoatData.MaximumSpeed * 0.621;
                     parkingBoatData.MaximumSpeed = Math.Round(maxSpeed, 2);
 
@@ -142,7 +156,7 @@ namespace PortAdministrationProject
 
                             parkingBoatData.DepartureTime = parkingBoatData.ArrivalTime.Value.AddSeconds(5);
                             parkingBoatData.Miscellaneous = $"Passenger count - {((RowingBoat)parkingBoatData).NumberOfPassengers}";
-                            
+
                             break;
 
                         case TypeOfBoat.MotorBoat:
@@ -169,9 +183,9 @@ namespace PortAdministrationProject
                 }
                 return randomData;
 
-                
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return null;
             }
@@ -186,7 +200,7 @@ namespace PortAdministrationProject
 
             foreach (BaseClassBoat backToSeaBoatData in backToSeaBoats)
             {
-                 backToSeaBoatData.DepartureTime = null;
+                backToSeaBoatData.DepartureTime = null;
                 backToSeaBoatData.ArrivalTime = null;
             }
             return backToSeaBoats;
@@ -195,12 +209,12 @@ namespace PortAdministrationProject
         public static List<BoatCountModelClass> CountingParkedBoats(List<BaseClassBoat> parkedboat)
         {
             var parkedBoatsSeperateCount = (from pb in parkedboat
-                                     group pb by pb.TypeOfBoat into pbCount
-                                     select new BoatCountModelClass
-                                     {
-                                         TypeOfBoat = pbCount.Key,
-                                         Count = pbCount.Count(),
-                                     }).ToList();
+                                            group pb by pb.TypeOfBoat into pbCount
+                                            select new BoatCountModelClass
+                                            {
+                                                TypeOfBoat = pbCount.Key,
+                                                Count = pbCount.Count(),
+                                            }).ToList();
             return parkedBoatsSeperateCount;
 
         }
@@ -219,22 +233,49 @@ namespace PortAdministrationProject
 
         //}
 
-        public static decimal TotalWeightOfParkedBoats (List<BaseClassBoat> parkedboat)
+        public static decimal TotalWeightOfParkedBoats(List<BaseClassBoat> parkedboat)
         {
             decimal toatlParkedBoatsWeight = (from boatWt in parkedboat
-                                          select boatWt.BoatWeight).Sum();
+                                              select boatWt.BoatWeight).Sum();
             return toatlParkedBoatsWeight;
         }
 
         public static int AverageMaxSpeedOfAllBoats(List<BaseClassBoat> parkedboat)
         {
             int averageMaxSpeedOfParkedBoats = (int)(from boatSpeed in parkedboat
-                                                select boatSpeed.MaximumSpeed).Average();
+                                                     select boatSpeed.MaximumSpeed).Average();
             return averageMaxSpeedOfParkedBoats;
         }
 
 
+        public static void ExportParkedBoatListToParkedBoatCsvFile(List<BaseClassBoat> parkedboat, string parkedBoatFilePath)
+        {
+            var lines = new List<string>();
+            lines.Add("TypeOfBoat,IDNumber, Weight, MaximumSpeed, ParkingId, ArrivalTime, DepartureTime, Miscellaneous");
+            foreach (var objBoat in parkedboat)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append($"{objBoat.TypeOfBoat},{objBoat.IDNumber},{objBoat.BoatWeight}," +
+                    $"{objBoat.MaximumSpeed},{string.Join('|', objBoat.ParkingId)},{objBoat.ArrivalTime},{objBoat.DepartureTime},{objBoat.Miscellaneous}");
+                lines.Add(sb.ToString());
+            }
+            File.WriteAllLines(parkedBoatFilePath, lines.ToArray());
+        }
 
+        public static void UpdateBoatListCsvFile(List<BaseClassBoat> boats, string boatsFilePath)
+        {
+            var boatLines = new List<string>();
+            boatLines.Add("TypeOfBoat,IDNumber, Weight, MaximumSpeed, ParkingId, ArrivalTime, DepartureTime, Miscellaneous");
+            foreach (var item in boats)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append($"{item.TypeOfBoat},{item.IDNumber},{item.BoatWeight}," +
+                    $"{item.MaximumSpeed},{string.Join('|', item.ParkingId)},{item.ArrivalTime},{item.DepartureTime},{item.Miscellaneous}");
+                boatLines.Add(sb.ToString());
+            }
+            File.WriteAllLines(boatsFilePath, boatLines.ToArray());
+
+        }
 
 
     }

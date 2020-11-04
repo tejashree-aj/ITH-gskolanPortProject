@@ -32,25 +32,24 @@ namespace PortAdministrationProject
         private readonly Timer timer;
         private readonly Timer parkingTimer;
         private readonly Timer seaTimer;
+
         public MainWindow()
         {
 
             InitializeComponent();
 
             BoatActivityManager.AddBoatToList(boats);
-
-
-            
-
-            //TimerCallbackdelegate - repeate funct(threading timer library)
-            this.parkingTimer = new Timer(parking, null, 500, 4000);
-
-            this.seaTimer = new Timer(boatsBackToSea, null, 500, 1000);
+            BoatActivityManager.ParkingBoatList(parkingBoats);
 
             //TimerCallback delegate - it is a background process which repeats after the schedule time(grid gets updated after 1sec)
             this.timer = new Timer(UpdateGrid, null, 500, 1000);
 
+            //TimerCallbackdelegate - repeate funct(threading timer library)
+            this.parkingTimer = new Timer(parkingList, null, 500, 4000);
 
+            this.seaTimer = new Timer(boatsBackToSea, null, 500, 1000);
+
+            
         }
 
 
@@ -64,16 +63,16 @@ namespace PortAdministrationProject
                     boatgrid.DataContext = null;
                     boatgrid.DataContext = parkingBoats;
 
-                    parkedboatcount.Text = $"Total number of boats parked: {parkingBoats.Count()}";
+                    parkedboatcount.Text = $" {parkingBoats.Count()}";
 
                     var cnt = BoatActivityManager.CountingParkedBoats(parkingBoats);
                     seperateboatcount.DataContext = cnt;
 
                     decimal totalBtWt = BoatActivityManager.TotalWeightOfParkedBoats(parkingBoats);
-                    parkedbaotweight.Text = $"Total weight of boats parked: {totalBtWt} Kg";
+                    parkedbaotweight.Text = $" {totalBtWt} Kg";
 
                     int avgSpeedOfAllBoats = BoatActivityManager.AverageMaxSpeedOfAllBoats(parkingBoats);
-                    parkedboatavgspeed.Text = $"Average speed of parked boats: {avgSpeedOfAllBoats} Km/hr";
+                    parkedboatavgspeed.Text = $"{avgSpeedOfAllBoats} Km/hr";
 
                 });
             }
@@ -84,18 +83,29 @@ namespace PortAdministrationProject
         }
 
 
-        private void parking(object state)
+        private void parkingList(object state)
         {
             List<BaseClassBoat> boatsinParkingList = boats.ParkingBoatList();
-            parkingBoats.AddRange(boatsinParkingList);            
+            parkingBoats.AddRange(boatsinParkingList);
+
+            BoatActivityManager.ExportParkedBoatListToParkedBoatCsvFile(parkingBoats.ToList(), @"BoatPortData/ParkedBoatData.csv");
         }
 
+        int saveFileCounter = 0;
         private void boatsBackToSea(object state)
         {
             List<BaseClassBoat> boatsBackToSeaList = parkingBoats.MoveBoatBackToSeaList();
-            boats.AddRange(boatsBackToSeaList);            
+            boats.AddRange(boatsBackToSeaList);
+
+            if (saveFileCounter > 5)
+            {
+                BoatActivityManager.UpdateBoatListCsvFile(boats.ToList(), @"BoatPortData\BoatData.csv");
+                saveFileCounter = 0;
+            }
+            saveFileCounter++;
         }
 
-    }
-}
 
+    }
+
+}
