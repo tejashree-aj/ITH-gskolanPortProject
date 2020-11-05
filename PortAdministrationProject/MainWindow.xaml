@@ -11,12 +11,12 @@
     </Window.Resources>
     <Grid HorizontalAlignment="Center">
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*" />
+            <RowDefinition Height="350" />
             <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
 
-        <DataGrid Grid.Row="0" x:Name="boatgrid" AutoGenerateColumns="False" IsReadOnly="True"  CanUserAddRows="False" 
-                  CanUserSortColumns="True" ItemsSource="{Binding}"  MaxWidth="2000" MaxHeight="1200" Margin="0,0,0,303" Grid.RowSpan="2">
+        <DataGrid Grid.Row="0" x:Name="boatgrid" AutoGenerateColumns="False" IsReadOnly="True"  CanUserAddRows="False" VerticalScrollBarVisibility="Auto"
+                  CanUserSortColumns="True" ItemsSource="{Binding}"  MaxWidth="2000" MinHeight="350" MaxHeight="1200" Margin="0,0,0,303" Grid.RowSpan="2">
             <DataGrid.Columns>
                 <DataGridTextColumn Width="90" Header="Type Of Boat" Binding="{Binding TypeOfBoat }" />
                 <DataGridTextColumn Width="60" Header="Boat ID" Binding="{Binding IDNumber}" />
@@ -29,15 +29,15 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <StackPanel Orientation="Vertical" Grid.Row="1" Margin="0,20,0,0" >
-            <Grid HorizontalAlignment="Left">
+        <StackPanel Orientation="Vertical" Grid.Row="1" Margin="0,200,0,0" >
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="400" />
                     <ColumnDefinition Width="400" />
                 </Grid.ColumnDefinitions>
                 <DataGrid x:Name="seperateboatcount" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" HorizontalAlignment="Left"
                   CanUserSortColumns="False" ItemsSource="{Binding}" Height="181" Width="190" Grid.Row="0" Grid.Column="0" >
-                    
+
                     <DataGrid.Columns>
                         <DataGridTextColumn Width="100" Header="Type Of Boat"  Binding="{Binding TypeOfBoat}"/>
                         <DataGridTextColumn Width="60" Header="Count" Binding="{Binding Count}" />
@@ -64,7 +64,7 @@
                     <TextBlock Grid.Column="0" Grid.Row="2" FontWeight="Bold" TextWrapping="Wrap"><Run Text="Average speed of parked boats:"/></TextBlock>
                     <TextBlock Grid.Column="1"  Grid.Row="2" x:Name="parkedboatavgspeed" />
                 </Grid>
-               
+
             </Grid>
         </StackPanel>
     </Grid>

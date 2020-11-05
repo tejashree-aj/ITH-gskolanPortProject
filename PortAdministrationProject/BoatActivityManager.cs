@@ -329,7 +329,8 @@ namespace PortAdministrationProject
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append($"{objBoat.TypeOfBoat},{objBoat.IDNumber},{objBoat.BoatWeight}," +
-                    $"{objBoat.MaximumSpeed},{string.Join('|', objBoat.ParkingId)},{objBoat.ArrivalTime},{objBoat.DepartureTime},{objBoat.Miscellaneous}");
+                    $"{objBoat.MaximumSpeed},{string.Join('|', objBoat.ParkingId)},{objBoat.ArrivalTime},{objBoat.DepartureTime},"+
+                    $"{objBoat.Miscellaneous.Replace("Passenger count - ", "").Replace("Number of Containers - ", "").Replace("Boat Length - ", "").Replace("Number of HorsePower - ", "")}");
                 lines.Add(sb.ToString());
             }
             File.WriteAllLines(parkedBoatFilePath, lines.ToArray());

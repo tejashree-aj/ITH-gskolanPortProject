@@ -23,6 +23,7 @@ namespace PortAdministrationProject
         private readonly Timer timer;
         private readonly Timer parkingTimer;
         private readonly Timer seaTimer;
+        private readonly Timer updateCSVTimer;
 
         public MainWindow()
         {
@@ -31,17 +32,17 @@ namespace PortAdministrationProject
             BoatActivityManager.AddBoatToList(boats);
             BoatActivityManager.AddParkedBoatToList(parkingBoats);
 
-            //parkingList(null);
             //TimerCallback delegate - it is a background process which repeats after the schedule time(grid gets updated after 1sec)
             this.timer = new Timer(UpdateGrid, null, 500, 1000);
 
-            //TimerCallbackdelegate - repeate funct(threading timer library)-updates parking list
+            ////TimerCallbackdelegate - repeate funct(threading timer library)-updates parking list
             this.parkingTimer = new Timer(startParkingListTimer, null, 500, 5000);
-            
-            //updates boat list
-            this.seaTimer = new Timer(boatsBackToSea, null, 500, 3000);
-        }
 
+            ////updates boat list
+            this.seaTimer = new Timer(boatsBackToSea, null, 500, 3000);
+
+            this.updateCSVTimer = new Timer(ExportBoatDataToCSV, null, 2000, 6000);
+        }
 
         private void UpdateGrid(object state)
         {
@@ -55,7 +56,7 @@ namespace PortAdministrationProject
                         boatgrid.DataContext = null;
                         boatgrid.DataContext = parkingBoats.ToList();
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
 
                     }
@@ -85,28 +86,31 @@ namespace PortAdministrationProject
             List<BaseClassBoat> boatsinParkingList = boats.MoveToParkingList();
             if (boatsinParkingList != null)
                 parkingBoats.AddRange(boatsinParkingList);
-            //TODO
-            string filePath = System.IO.Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName, @"BoatPortData\ParkedBoatData.csv");
-            //BoatActivityManager.ExportParkedBoatListToParkedBoatCsvFile(parkingBoats.ToList(), filePath);
+
         }
 
-        int saveFileCounter = 0;
         private void boatsBackToSea(object state)
         {
             List<BaseClassBoat> boatsBackToSeaList = parkingBoats.MoveBoatBackToSeaList();
             if (boatsBackToSeaList != null)
                 boats.AddRange(boatsBackToSeaList);
-
-            if (saveFileCounter > 5)
-            {   //TODO
-                string filePath = System.IO.Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName, @"BoatPortData\BoatData.csv");
-                //BoatActivityManager.ExportBoatListToBoatListCsvFile(boats.ToList(), filePath);
-                saveFileCounter = 0;
-            }
-            saveFileCounter++;
         }
 
+        private void ExportBoatDataToCSV(object state)
+        {
+            //TODO
+            string basePath = Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName;
+            List<BaseClassBoat> parkingBoatsToExport = new List<BaseClassBoat>(parkingBoats);
+            List<BaseClassBoat> seaBoatsToExport = new List<BaseClassBoat>(boats);
 
+            string filePath = System.IO.Path.Combine(basePath, @"BoatPortData\ParkedBoatData.csv");
+            BoatActivityManager.ExportParkedBoatListToParkedBoatCsvFile(parkingBoatsToExport, filePath);
+
+            filePath = System.IO.Path.Combine(basePath, @"BoatPortData\BoatData.csv");
+            BoatActivityManager.ExportBoatListToBoatListCsvFile(seaBoatsToExport, filePath);
+
+            parkingBoatsToExport = null;
+            seaBoatsToExport = null;
+        }
     }
-
 }
